@@ -1,0 +1,102 @@
+﻿Grammar        Details           Whitespace was implicitly defined : The special terminal 'Whitespace' was implicitly defined as: {&09, &0B, &0C, &20, &85, &A0, &1680, &180E, &2000 .. &200A, &202F, &205F, &3000}+.
+Grammar        Details           BIGINT was implicitly defined : The terminal was implicitly declared as BIGINT.
+Grammar        Details           CHAR was implicitly defined : The terminal was implicitly declared as CHAR.
+Grammar        Details           DECIMAL was implicitly defined : The terminal was implicitly declared as DECIMAL.
+Grammar        Details           DOUBLE was implicitly defined : The terminal was implicitly declared as DOUBLE.
+Grammar        Details           FLOAT was implicitly defined : The terminal was implicitly declared as FLOAT.
+Grammar        Details           INT64 was implicitly defined : The terminal was implicitly declared as 'INT64'.
+Grammar        Details           INTEGER was implicitly defined : The terminal was implicitly declared as INTEGER.
+Grammar        Details           LONGTEXT was implicitly defined : The terminal was implicitly declared as LONGTEXT.
+Grammar        Details           MEDIUMTEXT was implicitly defined : The terminal was implicitly declared as MEDIUMTEXT.
+Grammar        Details           MONEY was implicitly defined : The terminal was implicitly declared as MONEY.
+Grammar        Details           MVARCHAR was implicitly defined : The terminal was implicitly declared as MVARCHAR.
+Grammar        Details           NCHAR was implicitly defined : The terminal was implicitly declared as NCHAR.
+Grammar        Details           NTEXT was implicitly defined : The terminal was implicitly declared as NTEXT.
+Grammar        Details           NVARCHAR was implicitly defined : The terminal was implicitly declared as NVARCHAR.
+Grammar        Details           NUMERIC was implicitly defined : The terminal was implicitly declared as NUMERIC.
+Grammar        Details           OF was implicitly defined : The terminal was implicitly declared as OF.
+Grammar        Details           REAL was implicitly defined : The terminal was implicitly declared as REAL.
+Grammar        Details           REF was implicitly defined : The terminal was implicitly declared as REF.
+Grammar        Details           SMALLINT was implicitly defined : The terminal was implicitly declared as SMALLINT.
+Grammar        Details           TEXT was implicitly defined : The terminal was implicitly declared as TEXT.
+Grammar        Details           TIME was implicitly defined : The terminal was implicitly declared as TIME.
+Grammar        Details           TIMESTAMP was implicitly defined : The terminal was implicitly declared as TIMESTAMP.
+Grammar        Details           TINYTEXT was implicitly defined : The terminal was implicitly declared as TINYTEXT.
+Grammar        Details           VARCHAR was implicitly defined : The terminal was implicitly declared as VARCHAR.
+Grammar        Details           BEGIN was implicitly defined : The terminal was implicitly declared as BEGIN.
+Grammar        Details           ; was implicitly defined : The terminal was implicitly declared as ';'.
+Grammar        Details           #Root was implicitly defined : The terminal was implicitly declared as '#Root'.
+Grammar        Details           #UnionPart was implicitly defined : The terminal was implicitly declared as '#UnionPart'.
+Grammar        Details           #EmbeddedQuery was implicitly defined : The terminal was implicitly declared as '#EmbeddedQuery'.
+Grammar        Details           ( was implicitly defined : The terminal was implicitly declared as '('.
+Grammar        Details           ) was implicitly defined : The terminal was implicitly declared as ')'.
+Grammar        Details           ## was implicitly defined : The terminal was implicitly declared as '##'.
+Grammar        Details           , was implicitly defined : The terminal was implicitly declared as ','.
+Grammar        Details           .* was implicitly defined : The terminal was implicitly declared as '.*'.
+Grammar        Details           TRUNCATE was implicitly defined : The terminal was implicitly declared as TRUNCATE.
+Grammar        Details           INSERT was implicitly defined : The terminal was implicitly declared as INSERT.
+Grammar        Details           VALUES was implicitly defined : The terminal was implicitly declared as VALUES.
+Grammar        Details           . was implicitly defined : The terminal was implicitly declared as '.'.
+Grammar        Details           SET was implicitly defined : The terminal was implicitly declared as SET.
+Grammar        Details           DELETE was implicitly defined : The terminal was implicitly declared as DELETE.
+Grammar        Details           LIMIT was implicitly defined : The terminal was implicitly declared as LIMIT.
+Grammar        Details           OFFSET was implicitly defined : The terminal was implicitly declared as OFFSET.
+Grammar        Details           FETCH was implicitly defined : The terminal was implicitly declared as FETCH.
+Grammar        Details           ROW was implicitly defined : The terminal was implicitly declared as ROW.
+Grammar        Details           ROWS was implicitly defined : The terminal was implicitly declared as ROWS.
+Grammar        Details           FIRST was implicitly defined : The terminal was implicitly declared as FIRST.
+Grammar        Details           NEXT was implicitly defined : The terminal was implicitly declared as NEXT.
+Grammar        Details           WITH was implicitly defined : The terminal was implicitly declared as WITH.
+Grammar        Details           varLiteral was implicitly defined : The terminal was implicitly declared as varLiteral.
+Grammar        Details           * was implicitly defined : The terminal was implicitly declared as '*'.
+Grammar        Details           CONVERT was implicitly defined : The terminal was implicitly declared as CONVERT.
+Grammar        Details           MEDIUMINT was implicitly defined : The terminal was implicitly declared as MEDIUMINT.
+Grammar        Details           SMALLMONEY was implicitly defined : The terminal was implicitly declared as SMALLMONEY.
+Grammar        Details           SMALLDATETIME was implicitly defined : The terminal was implicitly declared as SMALLDATETIME.
+Grammar        Details           BINARY was implicitly defined : The terminal was implicitly declared as BINARY.
+Grammar        Details           DB_ID was implicitly defined : The terminal was implicitly declared as 'DB_ID'.
+Grammar        Details           DB_NAME was implicitly defined : The terminal was implicitly declared as 'DB_NAME'.
+Grammar        Details           ACOS was implicitly defined : The terminal was implicitly declared as ACOS.
+Grammar        Details           ASIN was implicitly defined : The terminal was implicitly declared as ASIN.
+Grammar        Details           ATAN was implicitly defined : The terminal was implicitly declared as ATAN.
+Grammar        Details           COS was implicitly defined : The terminal was implicitly declared as COS.
+Grammar        Details           DATALENGTH was implicitly defined : The terminal was implicitly declared as DATALENGTH.
+Grammar        Details           EXP was implicitly defined : The terminal was implicitly declared as EXP.
+Grammar        Details           LEN was implicitly defined : The terminal was implicitly declared as LEN.
+Grammar        Details           LTRIM was implicitly defined : The terminal was implicitly declared as LTRIM.
+Grammar        Details           LOG was implicitly defined : The terminal was implicitly declared as LOG.
+Grammar        Details           LOG10 was implicitly defined : The terminal was implicitly declared as 'LOG10'.
+Grammar        Details           OBJECT_NAME was implicitly defined : The terminal was implicitly declared as 'OBJECT_NAME'.
+Grammar        Details           RTRIM was implicitly defined : The terminal was implicitly declared as RTRIM.
+Grammar        Details           SIN was implicitly defined : The terminal was implicitly declared as SIN.
+Grammar        Details           SQRT was implicitly defined : The terminal was implicitly declared as SQRT.
+Grammar        Details           TAN was implicitly defined : The terminal was implicitly declared as TAN.
+Grammar        Details           TRIM was implicitly defined : The terminal was implicitly declared as TRIM.
+Grammar        Details           COALESCE was implicitly defined : The terminal was implicitly declared as COALESCE.
+Grammar        Details           POW was implicitly defined : The terminal was implicitly declared as POW.
+Grammar        Details           SUBSTR was implicitly defined : The terminal was implicitly declared as SUBSTR.
+Grammar        Details           EXISTS was implicitly defined : The terminal was implicitly declared as EXISTS.
+Grammar        Details           + was implicitly defined : The terminal was implicitly declared as '+'.
+Grammar        Details           - was implicitly defined : The terminal was implicitly declared as '-'.
+Grammar        Details           || was implicitly defined : The terminal was implicitly declared as '||'.
+Grammar        Details           / was implicitly defined : The terminal was implicitly declared as '/'.
+Grammar        Details           :: was implicitly defined : The terminal was implicitly declared as '::'.
+Grammar        Details           BadID is variable length. : 
+Grammar        Details           id is variable length. : 
+Grammar        Details           numLiteral is variable length. : 
+Grammar        Details           Parameter is variable length. : 
+Grammar        Details           refLiteral is variable length. : 
+Grammar        Details           strLiteral is variable length. : 
+Grammar        Details           The grammar contains a total of 190 formal terminals. : 
+Grammar        Success           The grammar was successfully analyzed : 
+LALR States    Warning   130     A Shift-Reduce Conflict was fixed : '(' can follow a completed rule and also be shifted.The conflict was resolved by selecting the 'shift' action over the 'reduce'. Be careful, some parts grammar may not be accessable. It is recommended that you attempt to remove all conflicts.
+LALR States    Warning   164     A Shift-Reduce Conflict was fixed : REFS can follow a completed rule and also be shifted.The conflict was resolved by selecting the 'shift' action over the 'reduce'. Be careful, some parts grammar may not be accessable. It is recommended that you attempt to remove all conflicts.
+LALR States    Warning   204     A Shift-Reduce Conflict was fixed : INTO can follow a completed rule and also be shifted.The conflict was resolved by selecting the 'shift' action over the 'reduce'. Be careful, some parts grammar may not be accessable. It is recommended that you attempt to remove all conflicts.
+LALR States    Warning   646     A Shift-Reduce Conflict was fixed : ',' can follow a completed rule and also be shifted.The conflict was resolved by selecting the 'shift' action over the 'reduce'. Be careful, some parts grammar may not be accessable. It is recommended that you attempt to remove all conflicts.
+LALR States    Details           LALR computation took: 0 Hours 0 Minutes 11 Seconds : 
+LALR States    Success           LALR Table was succesfully created : The table contains a total of 1000 states.
+LALR States    Details           Total actions: 11430 Shifts, 34378 Reduces, 4422 Gotos, 1 Accepts. : 
+DFA States     Details           The initial Nondeterministic Finite Automata has 2481 states : 
+DFA States     Success           The DFA State Table was successfully created : The table contains a total of 1274 states.
+DFA States     Details           DFA computation took: 0 Hours 0 Minutes 0 Seconds : 
+System         Success           The grammar was successfully analyzed and the table file was created. : 

@@ -1,0 +1,27 @@
+---------------------------------------
+22.06.2025 14:27:12.67
+Compare GPP performance with original GOLDbuild.exe
+Tested on 'Intel64 Family 6 Model 183 Stepping 1, GenuineIntel, 28 cores'
+Using for grammar file with 1000 LR states
+---------------------------------------
+Starting original GOLDbuild.exe. please wait........
+time begin: 14:27:12.67
+GOLDbuild.exe Done.
+time final: 14:27:25.13
+Original GOLDbuild.exe elapsed ms: 1246
+---------------------------------------
+---------------------------------------
+Starting GPP goldbuild.exe.
+time begin: 14:27:25.13
+GOLD Parser v5.2.0, (c) Devin Cook, http://www.goldparser.org, (reconstructed by @IntUnsigned)
+Success: test\1C8-Query.egt_gpp.egt
+time final: 14:27:25.49
+GPP Builder elapsed ms: 36
+---------------------------------------
+Comparing TEST\1C8-Query.egt_original_gui.egt and TEST\1C8-QUERY.EGT_GPP.EGT
+FC: no difference
+---------------------------------------
+---------------------------------------
+GPP Builder faster than the original GOLDbuild in: 34 times
+---------------------------------------
+---------------------------------------

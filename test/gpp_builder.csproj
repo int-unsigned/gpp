@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+	<Compile Include="..\source\**\*.cs" />
+  </ItemGroup>
+
+
+
+<!--	По умолчанию, начиная с NET 5 используется ICU глобализация, в отличие от NET-Framemwork, который
+		использует наитивную Windows-глобализацию NLS
+		Это влияет на порядок сортировки симболов в выводе таблиц, и, для один-к-одному соответствию
+		с оригинальным GoldParser мы переключаем проект тоже на использование Nls-сортировки
+		https://learn.microsoft.com/en-us/dotnet/core/extensions/globalization-icu
+		https://learn.microsoft.com/en-us/dotnet/core/runtime-config/globalization
+		ПС. Когда-то впоследствии, вероятно, можно отключить
+			Также, вроде, можно переключать манифестом уже собранное приложение.
+-->
+	<ItemGroup>
+	  <RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
+	</ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsPublishable>True</IsPublishable>
+    <DefineConstants>$(DefineConstants);TEST_BUILD;TODO_HERE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsPublishable>True</IsPublishable>
+  </PropertyGroup>
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PublishSingleFile>true</PublishSingleFile>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<DefineConstants>$(DefineConstants);TEST_BUILD;TODO_HERE</DefineConstants>
+</PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

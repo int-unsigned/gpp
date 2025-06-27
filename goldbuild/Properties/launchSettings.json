@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "goldbuild": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\dev\\gpp\\goldbuild\\test\\1C8-Query.grm\r\n-dat:\"D:\\dev\\gpp\\dat\"\r\n-g:\"2025-06-19 17:55\"\r\n-w\r\n-l"
+    }
+  }
+}

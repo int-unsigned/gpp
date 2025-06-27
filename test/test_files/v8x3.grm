@@ -1,0 +1,607 @@
+﻿"Name"  ='1C:Enterprise 8.0'
+"Version"   ='1.16'
+"Author"    ='Bazil Froloff aka Palytsh'
+"About" ='1C:Enterprise 8.0 builtin language grammar (en/ru versions)'
+
+"Character Mapping" = 'Unicode'!'None'
+"Case Sensitive"    = 'False'
+"Start symbol" = <UnitLines>
+
+
+!===============================
+! Charsets
+!===============================
+
+{a}     ={#1072}+{#1040}
+{be}    ={#1073}+{#1041}
+{ve}    ={#1074}+{#1042}
+{ghe}   ={#1075}+{#1043}
+{de}    ={#1076}+{#1044}
+{ie}    ={#1077}+{#1045}
+{zhe}   ={#1078}+{#1046}
+{ze}    ={#1079}+{#1047}
+{i}     ={#1080}+{#1048}
+{ii}    ={#1081}+{#1049}
+{ka}    ={#1082}+{#1050}
+{el}    ={#1083}+{#1051}
+{em}    ={#1084}+{#1052}
+{en}    ={#1085}+{#1053}
+{o}     ={#1086}+{#1054}
+{pe}    ={#1087}+{#1055}
+{er}    ={#1088}+{#1056}
+{es}    ={#1089}+{#1057}
+{te}    ={#1090}+{#1058}
+{u}     ={#1091}+{#1059}
+{ef}    ={#1092}+{#1060}
+{ha}    ={#1093}+{#1061}
+{tse}   ={#1094}+{#1062}
+{che}   ={#1095}+{#1063}
+{sha}   ={#1096}+{#1064}
+{shcha} ={#1097}+{#1065}
+{hs}    ={#1098}+{#1066}
+{yeru}  ={#1099}+{#1067}
+{ss}    ={#1100}+{#1068}
+{e}     ={#1101}+{#1069}
+{yu}    ={#1102}+{#1070}
+{ya}    ={#1103}+{#1071}
+{io}    ={#1105}+{#1025}
+
+{Letter Cyr}       = {Letter} + {Cyrillic}
+{Printable Cyr}    = {Printable} + {Cyrillic} + {&2013} + {&2014} + {&00A4} + {&2116}  !– — ¤ №
+{AlphaNumeric Cyr} = {AlphaNumeric} + {Cyrillic}
+{NewLine}          = {CR} + {LF}
+{String Chars}     = {Printable Cyr} + {Whitespace} - {CR} - {LF} - ["]
+{Label Chars}      = {Printable Cyr} - [~] - [:]
+
+{Id First}         = {Letter Cyr} + [_]
+{Id Tail}          = {Id First} + {Number}
+{Quote}            = ['']
+
+!===============================
+! Terminals
+!===============================
+
+
+LITERAL_LABEL      =   '~' {Label Chars}*
+
+!--- from EDT::Bsl.xtext ---
+!terminal BML_STRING: '"' (!('"'|'\r'|'\n') | '""')*;
+!terminal MML_STRING: '|' (!('"'|'\r'|'\n') | '""')*;
+!terminal EML_STRING: '|' (!('"'|'\r'|'\n') | '""')* '"'; 
+
+LITERAL_STR_LIN    =   '"' ({String Chars} | '""')* '"'                    
+!Это дает ошибку для комментария в конце LITERAL_STR_BEG\LITERAL_STR_MID
+!комментарий захватывается как часть строки, т.к. в этом случае конец строки - это //, а не {NewLine}
+!что делать пока не знаю
+!это ниже не работает - // захватывается как часть подстроки...
+!нужно решать на уровне парсера - допарсивать LITERAL_STR_BEG\LITERAL_STR_MID после DFA 
+!и разбивать один DFA-token на LITERAL_STR_BEG\LITERAL_STR_MID + CommentToken
+LITERAL_STR_BEG    =   '"' ({String Chars} | '""')* ({CR}{LF} | {LF})
+LITERAL_STR_MID    =   '|' ({String Chars} | '""')* ({CR}{LF} | {LF})
+LITERAL_STR_END    =   '|' ({String Chars} | '""')* '"'
+!или менять как-то логику парсера - у него нет понятия, что терминал может содержать один /, но не два подряд //
+!или как-то на уровень правил вынести...
+
+
+                                        
+LITERAL_NUM  ={Number} + ('.' {Number}*)?
+             
+!dateLiteral ={Quote} {Number}? {Number} '.' {Number}? {Number} '.' {Number}? {Number}? {Number}? {Number} {Quote}
+!Дата('00010101');
+{DateDlm} = {Printable Cyr} + {Whitespace} - {Number} - {Quote}         !{Whitespace} + [.] + [/]
+{TimeDlm} = {DateDlm} + [:]
+
+LITERAL_DATE = {Quote} {Number}{Number}{Number}{Number}{DateDlm}* {Number}{Number}{DateDlm}* {Number}{Number}{DateDlm}* ({Number}{Number}{TimeDlm}*)? ({Number}{Number}{TimeDlm}*)? ({Number}{Number}{TimeDlm}*)? {Quote}
+    
+TERM_AND        =   'and'           | ({i})
+TERM_OR         =   'or'            | ({i}{el}{i})
+TERM_NOT        =   'not'           | ({en}{ie})             
+TERM_BREAK      =   'break'         | ({pe}{er}{ie}{er}{ve}{a}{te}{ss})
+TERM_CONTINUE   =   'continue'      | ({pe}{er}{o}{de}{o}{el}{zhe}{i}{te}{ss})
+TERM_DO         =   'do'            | ({tse}{i}{ka}{el})
+TERM_EACH       =   'each'          | ({ka}{a}{zhe}{de}{o}{ghe}{o})
+TERM_ENDDO      =   'endDo'         | ({ka}{o}{en}{ie}{tse}{tse}{i}{ka}{el}{a})
+TERM_ENDFUNC    =   'endfunction'   | ({ka}{o}{en}{ie}{tse}{ef}{u}{en}{ka}{tse}{i}{i})
+TERM_ENDIF      =   'endIf'         | ({ka}{o}{en}{ie}{tse}{ie}{es}{el}{i})
+TERM_ENDPROC    =   'endProcedure'  | ({ka}{o}{en}{ie}{tse}{pe}{er}{o}{tse}{ie}{de}{u}{er}{yeru})
+TERM_ENDTRY     =   'endTry'        | ({ka}{o}{en}{ie}{tse}{pe}{o}{pe}{yeru}{te}{ka}{i})
+TERM_EXCEPT     =   'except'        | ({i}{es}{ka}{el}{yu}{che}{ie}{en}{i}{ie})
+TERM_EXPORT     =   'export'        | ({e}{ka}{es}{pe}{o}{er}{te})
+TERM_FOR        =   'for'           | ({de}{el}{ya})
+TERM_FUNC       =   'function'      | ({ef}{u}{en}{ka}{tse}{i}{ya})
+TERM_GOTO       =   'goto'          | ({pe}{ie}{er}{ie}{ii}{te}{i})
+TERM_IF         =   'if'            | ({ie}{es}{el}{i})
+TERM_ELIF       =   'elsIf'         | ({i}{en}{a}{che}{ie}{ie}{es}{el}{i})
+TERM_ELSE       =   'else'          | ({i}{en}{a}{che}{ie})
+TERM_IN         =   'in'            | ({i}{ze})
+TERM_NEW        =   'new'           | ({en}{o}{ve}{yeru}{ii})
+TERM_PROC       =   'procedure'     | ({pe}{er}{o}{tse}{ie}{de}{u}{er}{a})
+TERM_RAISE      =   'raise'         | ({ve}{yeru}{ze}{ve}{a}{te}{ss}{i}{es}{ka}{el}{yu}{che}{ie}{en}{i}{ie})
+TERM_RETURN     =   'return'        | ({ve}{o}{ze}{ve}{er}{a}{te})
+TERM_THEN       =   'then'          | ({te}{o}{ghe}{de}{a})
+TERM_TO         =   'to'            | ({pe}{o})
+TERM_TRY        =   'try'           | ({pe}{o}{pe}{yeru}{te}{ka}{a})
+TERM_VAL        =   'val'           | ({ze}{en}{a}{che})
+TERM_VAR        =   'var'           | ({pe}{ie}{er}{ie}{em})
+TERM_WHILE      =   'while'         | ({pe}{o}{ka}{a})
+TERM_REGION     =   'region'        | ('ОБЛАСТЬ')
+TERM_ENDREGION  =   'EndRegion'     | ('КонецОбласти')
+TERM_TRUE       =   'true'          | ({i}{es}{te}{i}{en}{a})
+TERM_FALSE      =   'false'         | ({el}{o}{zhe}{ss})
+TERM_UNDEFINED  =   'undefined'     | ({en}{ie}{o}{pe}{er}{ie}{de}{ie}{el}{ie}{en}{o})
+TERM_NULL       =   'NULL'
+
+
+IDENT_NAME      = {Id First}{Id Tail}*
+IDENT_MEMB      = '.'{Id First}{Id Tail}*
+                                            
+EOS             = ';'             
+Comment Line    = '//' 
+             
+
+!                           
+!client ='client' | ({ka}{el}{i}{ie}{en}{te})
+!server ='server' | ({es}{ie}{er}{ve}{ie}{er})
+!externalConnection='externalConnection' | ({ve}{en}{ie}{sha}{en}{ie}{ie}{es}{o}{ie}{de}{i}{en}{ie}{en}{i}{ie})
+!
+
+
+
+!===============================
+! Rules
+!===============================
+<UnitLines>         ::= <UnitLine> <UnitLines>
+                    |
+
+<UnitLine>          ::= <DeclProc>
+                    |   <DeclFunc>
+                    |   <DeclVar>                     
+                    |   <DeclEnd>
+                    |   <PpDirectiveIf>
+                    |   <PpDirectiveElIf>
+                    |   <PpDirectiveElse>
+                    |   <PpDirectiveEndif>
+                    |   <PpDirectiveRgn>
+                    |   <PpDirectiveEndRgn>
+                    |   <StmtAssign>
+                    |   <StmtCall>                                                            
+                    |   <StmtIf>
+                    |   <StmtIfElIf>                    
+                    |   <StmtIfElse>                    
+                    |   <StmtIfEnd>                    
+                    |   <StmtLoopWhile>
+                    |   <StmtLoopFor>                    
+                    |   <StmtLoopForEach>                    
+                    |   <StmtLoopEnd>    
+                    |   <StmtLoopContinue>                                    
+                    |   <StmtLoopBreak>
+                    |   <StmtTry>
+                    |   <StmtTryExcept>                    
+                    |   <StmtTryEnd>                    
+                    |   <StmtRaise>                    
+                    |   <StmtRaiseExpr>                                        
+                    |   <StmtGoto>
+                    |   <StmtLabel>                    
+                    |   <StmtReturn>
+                    |   <StmtReturnExpr>                    
+                    |   EOS  
+
+
+
+! У нас return [<expr>] & raise [<expr>] жадные и захватывают любые следующие термины как выражения
+! (return endif - это возврат переменной endif, return goto ~1: - возврат переменной goto + метка)
+! поэтому нам нужно убрать из возможных значений возвращаемых переменных ключевые слова, к сожалению
+! также не удается оставить их для начала сложных конструкций типа return try(), return endif.meth()
+! т.к. тогда в случае если return endif парсер захватывает endif и генерит ошибку ожидая продолжения.
+! из этого вывод - все ключевые слова с которых начинаются стейтменты нужно убрать из идентификатора начала выражения
+! вообще - иначи если это выражение встретится после return\raise без ';' то это приведет
+! или к неожиданной ошибке или неожиданному поведению
+<IdKwExpr>        ::=   TERM_REGION
+                    |   TERM_ENDREGION                     
+!                    |   TERM_NOT
+!                    |   TERM_BREAK
+!                    |   TERM_CONTINUE
+                    |   TERM_DO
+                    |   TERM_EACH
+!                    |   TERM_ENDDO
+!                    |   TERM_ENDFUNC
+!                    |   TERM_ENDIF
+!                    |   TERM_ENDPROC
+!                    |   TERM_ENDTRY
+!                    |   TERM_EXCEPT
+!                    |   TERM_EXPORT
+!                    |   TERM_FOR  
+!                    |   TERM_FUNC
+!                    |   TERM_GOTO
+!                    |   TERM_IF
+!                    |   TERM_ELIF
+!                    |   TERM_ELSE
+                    |   TERM_IN
+!                    |   TERM_NEW
+!                    |   TERM_PROC
+!                    |   TERM_RAISE
+!                    |   TERM_RETURN
+                    |   TERM_TO
+!                    |   TERM_TRY
+!                    |   TERM_VAR    
+!                    |   TERM_WHILE
+!                    |   TERM_TRUE
+!                    |   TERM_FALSE
+!                    |   TERM_UNDEFINED
+!                    |   TERM_NULL
+                    | TERM_VAL
+!                    | TERM_OR
+!                    | TERM_AND
+                    | TERM_THEN
+
+! ключевые слова, которые можно использовать в первой части стейтментов assign & call
+<IdKwName>        ::=   TERM_REGION
+                    |   TERM_ENDREGION                     
+!                    |   TERM_NOT
+                    |   TERM_BREAK
+                    |   TERM_CONTINUE
+                    |   TERM_DO
+                    |   TERM_EACH
+                    |   TERM_ENDDO
+                    |   TERM_ENDFUNC
+                    |   TERM_ENDIF
+                    |   TERM_ENDPROC
+                    |   TERM_ENDTRY
+                    |   TERM_EXCEPT
+!                    |   TERM_EXPORT
+                    |   TERM_FOR        ! оставляю разрешенным - приводит к ошибке
+!                    |   TERM_FUNC
+                    |   TERM_GOTO
+!                    |   TERM_IF
+!                    |   TERM_ELIF
+                    |   TERM_ELSE
+                    |   TERM_IN
+!                    |   TERM_NEW
+!                    |   TERM_PROC
+!                    |   TERM_RAISE
+!                    |   TERM_RETURN
+                    |   TERM_TO
+                    |   TERM_TRY
+!                    |   TERM_VAR        ! оставляю разрешенным - приводит к ошибке
+!                    |   TERM_WHILE     ! нельзя разрешать while(1) это или вызов функции с аргументом 1 
+!                                       или цикл с выражением в скобках. но видимо для while[] - можно!!!
+!                    |   TERM_TRUE
+!                    |   TERM_FALSE
+!                    |   TERM_UNDEFINED
+!                    |   TERM_NULL
+                    | TERM_VAL
+!                    | TERM_OR
+!                    | TERM_AND
+                    | TERM_THEN
+
+<IdKwSafe>          ::= TERM_REGION
+                    |   TERM_ENDREGION                     
+                    |   TERM_NOT
+                    |   TERM_BREAK
+                    |   TERM_CONTINUE
+                    |   TERM_DO
+                    |   TERM_EACH
+                    |   TERM_ENDDO
+                    |   TERM_ENDFUNC
+                    |   TERM_ENDIF
+                    |   TERM_ENDPROC
+                    |   TERM_ENDTRY
+                    |   TERM_EXCEPT
+                    |   TERM_EXPORT
+                    |   TERM_FOR
+                    |   TERM_FUNC
+                    |   TERM_GOTO
+                    |   TERM_IF
+                    |   TERM_ELIF
+                    |   TERM_ELSE
+                    |   TERM_IN
+                    |   TERM_NEW
+                    |   TERM_PROC
+                    |   TERM_RAISE
+                    |   TERM_RETURN
+                    |   TERM_TO
+                    |   TERM_TRY
+                    |   TERM_VAR
+                    |   TERM_WHILE
+                    |   TERM_TRUE
+                    |   TERM_FALSE
+                    |   TERM_UNDEFINED
+                    |   TERM_NULL
+
+<IdKwPpv>           ::= <IdKwSafe>
+                    |   TERM_VAL 
+                                                             
+<IdKwAll>           ::= <IdKwSafe>
+                    |   TERM_VAL
+                    |   TERM_OR
+                    |   TERM_AND
+                    |   TERM_THEN
+                                        
+<IdKwPar>           ::= <IdKwSafe>
+                    |   TERM_OR
+                    |   TERM_AND
+                    |   TERM_THEN
+                                                                                
+<IdMeth>            ::= IDENT_NAME
+                     |  <IdKwAll>
+<IdVar>             ::= IDENT_NAME
+                     |  <IdKwAll>                     
+<IdPpRegion>        ::= IDENT_NAME
+                     |  <IdKwAll>                     
+<IdPpValue>         ::= IDENT_NAME
+                     |  <IdKwPpv>                     
+<IdParam>           ::= IDENT_NAME
+                     |  <IdKwPar>                     
+<IdAttr>            ::= IDENT_NAME
+                     |  <IdKwAll>                     
+<IdNew>             ::= IDENT_NAME
+                     |  <IdKwAll>            
+                              
+!идентификаторы с которых начинаются идентификаторы встречающиеся в выражениях, присвоении, вызове. 
+!это понятие такое-же или шире, чем идентификаторы переменных и\или методов, т.к. объекты могут быть внешние
+!еще... в грамматике без EOS есть два разрешаемых шифт-редьюс конфликта - Return [<Expr>] и Raise [<Expr>]
+!без расширения идентификаторов нек-рыми ключевыми словами - их два. после расширения - много, но только для
+!двух состояний - все ок, но нужно внимательно контролировать.
+<IdExpr>         ::= IDENT_NAME
+                  |  <IdKwExpr> 
+
+<IdName>         ::= IDENT_NAME
+                  |  <IdKwName> 
+                   
+!идентификаторы свойств\методов после точки (может быть шире чем идентификаторы в первой части составного ид)
+<IdMemb>            ::=     IDENT_MEMB
+                      | '.' TERM_REGION
+                      | '.' TERM_ENDREGION                     
+                      | '.' TERM_NOT
+                      | '.' TERM_BREAK
+                      | '.' TERM_CONTINUE
+                      | '.' TERM_DO
+                      | '.' TERM_EACH
+                      | '.' TERM_ENDDO
+                      | '.' TERM_ENDFUNC
+                      | '.' TERM_ENDIF
+                      | '.' TERM_ENDPROC
+                      | '.' TERM_ENDTRY
+                      | '.' TERM_EXCEPT
+                      | '.' TERM_EXPORT
+                      | '.' TERM_FOR
+                      | '.' TERM_FUNC
+                      | '.' TERM_GOTO
+                      | '.' TERM_IF
+                      | '.' TERM_ELIF
+                      | '.' TERM_ELSE
+                      | '.' TERM_IN
+                      | '.' TERM_NEW
+                      | '.' TERM_PROC
+                      | '.' TERM_RAISE
+                      | '.' TERM_RETURN
+                      | '.' TERM_TO
+                      | '.' TERM_TRY
+                      | '.' TERM_VAR
+                      | '.' TERM_WHILE
+                      | '.' TERM_TRUE
+                      | '.' TERM_FALSE
+                      | '.' TERM_UNDEFINED
+                      | '.' TERM_NULL
+                      | '.' TERM_VAL
+                      | '.' TERM_OR
+                      | '.' TERM_AND
+                      | '.' TERM_THEN
+
+<DeclAttr>          ::= '&' <IdAttr>
+                     |  '&' <IdAttr> '(' <ExprLiteralText> ')'
+                     
+<DeclAttrsList>     ::= <DeclAttr> <DeclAttrsList>
+                     |
+                                                                                                                                                                        
+<DeclProc>          ::= <DeclAttrsList> TERM_PROC <IdMeth> '(' <ParamList> ')' <DeclExportOpt>
+<DeclFunc>          ::= <DeclAttrsList> TERM_FUNC <IdMeth> '(' <ParamList> ')' <DeclExportOpt>
+
+<DeclVar>           ::= <DeclAttrsList> TERM_VAR <DeclVarList>! EOS
+
+<DeclVarList>       ::= <DeclVarItem>
+                      | <DeclVarItem> ',' <DeclVarList>
+
+<DeclVarItem>       ::= <IdVar> <DeclExportOpt>
+
+<PpDirectiveRgn>    ::= '#' TERM_REGION <IdPpRegion>     ! Имя области не опционально и должно быть идентификатором (1С-хелп)
+<PpDirectiveEndRgn> ::= '#' TERM_ENDREGION
+<PpDirectiveIf>     ::= '#' TERM_IF <PpExpr> TERM_THEN 
+<PpDirectiveElIf>   ::= '#' TERM_ELIF <PpExpr> TERM_THEN 
+<PpDirectiveElse>   ::= '#' TERM_ELSE
+<PpDirectiveEndif>  ::= '#' TERM_ENDIF
+                                                               
+<PpExpr>            ::= <PpExprAnd> TERM_OR <PpExpr>
+                    |   <PpExprAnd>
+
+<PpExprAnd>         ::= <PpExprNot> TERM_AND <PpExprAnd>
+                    |   <PpExprNot>
+
+<PpExprNot>         ::= TERM_NOT <PpExprValue>
+                    |   <PpExprValue>
+                
+<PpExprValue>       ::= '(' <PpExpr> ')'
+                    |   <IdPpValue>
+                
+
+<DeclExportOpt>    ::= TERM_EXPORT
+                     |  !nothing
+                                                                                                   
+<DeclEnd>           ::= TERM_ENDPROC
+                     |  TERM_ENDFUNC
+
+<ParamList>         ::= <ParamItem> ',' <ParamList>
+                      | <ParamItem>
+                      | !nothing
+
+<ParamItem>         ::= <ParamByValOpt> <IdParam>
+                      | <ParamByValOpt> <IdParam> '=' <ParamDefConst>
+
+<ParamByValOpt>     ::= TERM_VAL
+                      | !nothing
+
+<ParamDefConst>     ::= <ExprLiteralText>
+                      | LITERAL_DATE
+                      | <ParamDefSign> LITERAL_NUM
+                      | <ParamDefSign> TERM_TRUE
+                      | <ParamDefSign> TERM_FALSE
+                      | <ParamDefSign> TERM_UNDEFINED
+                      | <ParamDefSign> TERM_NULL
+                    
+! для значения по умолчание 1С допускает +Null - чё сие означает - загадка
+<ParamDefSign>      ::= '+'
+                      | '-'
+                      | !nothing
+                                                                                                              
+<StmtLabel>         ::= LITERAL_LABEL ':'                   
+<StmtGoto>          ::= TERM_GOTO LITERAL_LABEL
+<StmtIf>            ::= TERM_IF <Expr> TERM_THEN
+<StmtIfElIf>        ::= TERM_ELIF <Expr> TERM_THEN
+<StmtIfElse>        ::= TERM_ELSE
+<StmtIfEnd>         ::= TERM_ENDIF
+ 
+<StmtLoopWhile>     ::= TERM_WHILE <Expr> TERM_DO 
+<StmtLoopFor>       ::= TERM_FOR <IdVar> '=' <Expr> TERM_TO <Expr> TERM_DO 
+<StmtLoopForEach>   ::= TERM_FOR TERM_EACH <IdVar> TERM_IN  <Expr> TERM_DO
+<StmtLoopEnd>       ::= TERM_ENDDO
+<StmtLoopBreak>     ::= TERM_BREAK
+<StmtLoopContinue>  ::= TERM_CONTINUE
+
+!- вызывает шифт-редьюс конфликт - без EOS парсер для Return <Expr> сомневается - это отдельно ретурн и отдельно експр 
+!- или все-же ретурн-експр. Решение принимается в пользу ретурн-експр и это правильно. Все ок. 
+<StmtReturn>        ::= TERM_RETURN
+<StmtReturnExpr>    ::= TERM_RETURN <Expr>
+                                          
+<StmtTry>           ::= TERM_TRY 
+<StmtTryExcept>     ::= TERM_EXCEPT 
+<StmtTryEnd>        ::= TERM_ENDTRY
+!- то-же, что и для ретурн - без EOS конфликт в пользу Raise-<Expr> - все ок.
+<StmtRaise>         ::= TERM_RAISE
+<StmtRaiseExpr>     ::= TERM_RAISE <Expr>
+
+!По видимому в телах блочных статментов первый статмент допускается без ;
+!В моем случае нужно убирать EOS со всех статментов.
+<StmtAssign>        ::= <NameVarHeadObj>                                    '=' <Expr>
+                     |  <NameVarHead>                   <ExprVarMembObj>    '=' <Expr>
+                     |  <NameVarHead> <ExprVarTail>     <ExprVarMembObj>    '=' <Expr>                     
+                     
+<StmtCall>          ::= <IdName>                                                <Args>
+                     |  <NameVarHead>                   <IdMemb>                <Args>
+                     |  <NameVarHead> <ExprVarTail>     <IdMemb>                <Args>                     
+                     
+!чертовщина какая-то: несмотря на то, что <ExprVar> декларирован как и общее начало последних двух строк
+!замена приводит к появлению шифт-редьюс конфликта
+!оставляю как есть
+
+! Stmt
+<NameVarHeadObj>    ::= <IdName>
+                     |  <IdName> <ExprArrayIndices>
+                     |  <IdName> <Args> <ExprArrayIndices>
+
+<NameVarHead>       ::= <NameVarHeadObj>
+                     |  <IdName> <Args>
+
+<ExprVarMembObj>    ::= <IdMemb>
+                     |  <IdMemb> <ExprArrayIndices>
+                     |  <IdMemb> <Args> <ExprArrayIndices>
+                                                                                       
+<ExprVarMemb>       ::= <ExprVarMembObj>
+                     |  <IdMemb> <Args>
+                                  
+<ExprVarTail>       ::= <ExprVarMemb>
+                     |  <ExprVarTail> <ExprVarMemb>
+
+
+!Expr
+<ExprVarHeadObj>    ::= <IdExpr>
+                     |  <IdExpr> <ExprArrayIndices>
+                     |  <IdExpr> <Args> <ExprArrayIndices>
+
+<ExprVarHead>       ::= <ExprVarHeadObj>
+                     |  <IdExpr> <Args>
+
+<ExprVar>           ::= <ExprVarHead>
+                     |  <ExprVarHead> <ExprVarTail>
+
+!!! можно только новый(а) и новый(а, б) !!!                                          
+<ExprNew>           ::= TERM_NEW <IdNew>
+                    |   TERM_NEW <IdNew> <Args>
+                    |   TERM_NEW '(' <Expr> ')'
+                    |   TERM_NEW '(' <Expr> ',' <Expr> ')'
+                              
+<ExprValue>         ::= <ExprLiteral>
+                    |   <ExprNew>
+                    |   <ExprVar>
+
+<ExprArrayIndices>  ::= '[' <Expr> ']'
+                     |  '[' <Expr> ']' <ExprArrayIndices>
+                    
+<ArgsItem>          ::= <Expr>
+                     
+<ArgsItemOpt>       ::= <ArgsItem>
+                     |  !noting
+                     
+<ArgsTail>          ::= ',' <ArgsItemOpt>
+                     |  ',' <ArgsItemOpt> <ArgsTail>
+
+!в такой конструкции '('')' трактуется как один пустой параметр, но так проще чем городить ArgsTail
+<Args>              ::= '(' ')'
+                     |  '(' <ArgsItem> ')'
+                     |  '(' <ArgsItem> <ArgsTail> ')'                     
+                     |  '(' <ArgsTail> ')'                     
+                     
+<ExprUnary>         ::= <ExprValue>
+                    |   <ExprIIf>
+                    |   '(' <Expr> ')'
+                    |   '+' <ExprUnary>
+                    |   '-' <ExprUnary> 
+                    |   TERM_NOT <ExprUnary>
+
+<ExprIIf>           ::= '?' '(' <Expr> ','  <Expr> ',' <Expr> ')'
+
+<ExprMulDiv>        ::= <ExprUnary>
+                      | <ExprMulDiv> '*' <ExprUnary> 
+                      | <ExprMulDiv> '/' <ExprUnary> 
+                      | <ExprMulDiv> '%' <ExprUnary>
+
+<ExprAddSub>        ::= <ExprMulDiv> 
+                      | <ExprAddSub> '+' <ExprMulDiv> 
+                      | <ExprAddSub> '-' <ExprMulDiv>
+
+<ExprCompare>       ::= <ExprAddSub>
+                      | <ExprCompare> '<' <ExprAddSub> 
+                      | <ExprCompare> '>' <ExprAddSub> 
+                      | <ExprCompare> '<=' <ExprAddSub>
+                      | <ExprCompare> '>=' <ExprAddSub>
+
+<ExprEquality>      ::= <ExprCompare> 
+                     |  <ExprEquality> '=' <ExprCompare> 
+                     |  <ExprEquality> '<>' <ExprCompare>
+
+<ExprLogAND>        ::= <ExprEquality>
+                      | <ExprLogAND> TERM_AND <ExprEquality>
+
+<ExprLogOR>         ::= <ExprLogAND>
+                      | <ExprLogOR> TERM_OR <ExprLogAND>
+                          
+<Expr>              ::= <ExprLogOR>
+                        
+<ExprLiteral>       ::= <ExprLiteralText>
+                      | LITERAL_DATE                     
+                      | LITERAL_NUM
+                      | TERM_TRUE
+                      | TERM_FALSE
+                      | TERM_UNDEFINED
+                      | TERM_NULL
+
+
+<ExprLiteralStrMid> ::= LITERAL_STR_MID
+                      | <ExprLiteralStrMid> LITERAL_STR_MID
+                    
+<ExprLiteralStr>    ::= LITERAL_STR_LIN
+                      | LITERAL_STR_BEG LITERAL_STR_END
+                      | LITERAL_STR_BEG <ExprLiteralStrMid> LITERAL_STR_END
+                     
+<ExprLiteralText>   ::= <ExprLiteralStr>
+                     |  <ExprLiteralText> <ExprLiteralStr>
+                                           
